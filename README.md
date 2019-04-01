@@ -13,9 +13,11 @@ import (
 )
 ```
 
-The with statement is used to wrap the execution of code with methods defined by a object. This allows common try...except...finally usage patterns to be encapsulated for convenient reuse.
+The with statement is used to wrap the execution of code with methods defined by an object. This allows common tasks to be encapsulated for convenient reuse.
 
-A with statement is defined as followed: `gw.With([struct], [fn]);` (`With(ee EnterExiter, act func(er *EnterReturn) error) error`).
+A with statement is defined as followed: `gw.With([struct], [fn]);`.
+
+An API of: `With(ee EnterExiter, act func(er *EnterReturn) error) error`.
 
 The executation of a with statement is done as followed:
 
