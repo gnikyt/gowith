@@ -33,7 +33,7 @@ type Db struct{
   // ...
 }
 
-func (db Db) Enter() (*EnterReturn, error) {
+func (db Db) Enter() (*gw.EnterReturn, error) {
   db, err := db.Open("./example.db")
 
   if err != nil {
@@ -42,10 +42,10 @@ func (db Db) Enter() (*EnterReturn, error) {
   }
 
   // All good, pass the database to fn.
-  return &EnterReturn{Value: db}, nil
+  return &gw.EnterReturn{Value: db}, nil
 }
 
-func (db Db) Exit(er *EnterReturn, err error) error {
+func (db Db) Exit(er *gw.EnterReturn, err error) error {
   db := er.Value
 
   if err != nil {
@@ -60,10 +60,8 @@ func (db Db) Exit(er *EnterReturn, err error) error {
 }
 
 // fn
-err := gw.With(new(Db), func(er *EnterReturn) error {
-  db := er.Value
-
-  stmt, err := db.Prepare("INSERT INTO xyz (firstname, lastname) VALUES (?, ?)")
+err := gw.With(new(Db), func(er *gw.EnterReturn) error {
+  stmt, err := er.Value.Prepare("INSERT INTO xyz (firstname, lastname) VALUES (?, ?)")
   stmt.Exec("John", "Doe")
 
   return err
