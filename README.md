@@ -15,16 +15,16 @@ import (
 
 The with statement is used to wrap the execution of code with methods defined by an object. This allows common tasks to be encapsulated for convenient reuse.
 
-A with statement is defined as followed: `gw.With([struct], [fn]);`.
+A with statement is defined as followed: `gw.With([EnterExiter], [fn]);`.
 
 An API of: `With(ee EnterExiter, act func(er *EnterReturn) error) error`.
 
 The executation of a with statement is done as followed:
 
-1. The `[struct]`'s `Enter()` method is invoked
+1. The `[EnterExiter]`'s `Enter()` method is invoked
 2. The return value from `Enter()` is assigned to the first argument of `[fn]`
 3. The `[fn]` is executed (if `Enter()` returned no error)
-4. The `[struct]`'s `Exit()` method is invoked (always). If an error was caused in `[fn]`, the return value from `Enter()` and `[fn]`'s error are to be passed as arguments to `Exit()`.
+4. The `[EnterExiter]`'s `Exit()` method is invoked (always). If an error was caused in `[fn]`, the return value from `Enter()` and `[fn]`'s error are to be passed as arguments to `Exit()`.
 
 Here is a sample object and a with-statement:
 
