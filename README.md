@@ -42,13 +42,13 @@ func (db Db) Enter() (*EnterReturn, error) {
   }
 
   // All good, pass the database to fn.
-	return &EnterReturn{Value: db}, nil
+  return &EnterReturn{Value: db}, nil
 }
 
 func (db Db) Exit(er *EnterReturn, err error) error {
   db := er.Value
 
-	if err != nil {
+  if err != nil {
     // Enter() or fn had an error, return it.
     db.Rollback()
     return err
