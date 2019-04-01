@@ -32,7 +32,7 @@ func TestFull(t *testing.T) {
 	var ran bool
 	var erv interface{}
 
-	err := With(new(Db), func(er *EnterReturn) error {
+	err := New(new(Db), func(er *EnterReturn) error {
 		ran = true
 		erv = er.Value
 
@@ -58,7 +58,7 @@ func TestErrorOnEnter(t *testing.T) {
 	var ran bool
 	var erv interface{}
 
-	err := With(new(DbErrOnEnt), func(er *EnterReturn) error {
+	err := New(new(DbErrOnEnt), func(er *EnterReturn) error {
 		ran = true
 		erv = er.Value
 
@@ -77,7 +77,7 @@ func TestErrorOnEnter(t *testing.T) {
 // Test when an error happens on action.
 // And Exit should recieve the error.
 func TestErrorOnAction(t *testing.T) {
-	err := With(new(Db), func(er *EnterReturn) error {
+	err := New(new(Db), func(er *EnterReturn) error {
 		return errors.New("error")
 	})
 

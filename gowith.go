@@ -16,10 +16,10 @@ type EnterExiter interface {
 }
 
 // Main function.
-// Accept anything conforming to Wither as first argument.
+// Accept anything conforming to EnterExiter as first argument.
 // Accept an anonymous function which fires betwen Enter and Exit.
 // Return an error (if any happened).
-func With(ee EnterExiter, act func(er *EnterReturn) error) error {
+func New(ee EnterExiter, act func(er *EnterReturn) error) error {
 	var err error
 
 	// Perform the enter function.

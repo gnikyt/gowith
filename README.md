@@ -9,15 +9,15 @@ This function simply mocks Python's [with statement](http://docs.python.org/rele
 
 ```go
 import (
-  gw "githib.com/ohmybrew/gowith"
+  "githib.com/ohmybrew/gowith"
 )
 ```
 
 The with statement is used to wrap the execution of code with methods defined by an object. This allows common tasks to be encapsulated for convenient reuse.
 
-A with statement is defined as followed: `gw.With([EnterExiter], [fn]);`.
+A with statement is defined as followed: `gowith.New([EnterExiter], [fn]);`.
 
-An API of: `With(ee EnterExiter, act func(er *EnterReturn) error) error`.
+An API of: `New(ee EnterExiter, act func(er *EnterReturn) error) error`.
 
 The executation of a with statement is done as followed:
 
@@ -33,7 +33,7 @@ type Db struct{
   // ...
 }
 
-func (db Db) Enter() (*gw.EnterReturn, error) {
+func (db Db) Enter() (*gowith.EnterReturn, error) {
   db, err := db.Open("./example.db")
 
   if err != nil {
@@ -45,7 +45,7 @@ func (db Db) Enter() (*gw.EnterReturn, error) {
   return &gw.EnterReturn{Value: db}, nil
 }
 
-func (db Db) Exit(er *gw.EnterReturn, err error) error {
+func (db Db) Exit(er *gowith.EnterReturn, err error) error {
   db := er.Value
 
   if err != nil {
@@ -60,7 +60,8 @@ func (db Db) Exit(er *gw.EnterReturn, err error) error {
 }
 
 // fn
-err := gw.With(new(Db), func(er *gw.EnterReturn) error {
+db := new(Db)
+err := gowith.New(db, func(er *gowith.EnterReturn) error {
   stmt, err := er.Value.Prepare("INSERT INTO xyz (firstname, lastname) VALUES (?, ?)")
   stmt.Exec("John", "Doe")
 
