@@ -1,6 +1,6 @@
 # gowith
 
-![Tests](https://github.com/gnikyt/Basic-Shopify-API/workflows/Package%20Test/badge.svg?branch=master)
+![Tests](https://github.com/gnikyt/gowith/workflows/CI/badge.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/gnikyt/gowith/badge.svg?branch=master)](https://coveralls.io/github/gnikyt/gowith?branch=master)
 
 This function simply mocks Python's [with statement](http://docs.python.org/release/2.5.3/ref/with.html) for Go.
