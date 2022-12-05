@@ -1,1 +1,3 @@
-module github.com/ohmybrew/gowith
+module github.com/gnikyt/gowith
+
+go 1.18

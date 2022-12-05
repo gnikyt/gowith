@@ -8,34 +8,37 @@ import (
 // Struct for full working test.
 type Db struct{}
 
-func (db Db) Enter() (*EnterReturn, error) {
-	return &EnterReturn{Value: 3}, nil
+// Implement EnterExiter's Enter method.
+func (db Db) Enter() (bool, error) {
+	return true, nil
 }
 
-func (db Db) Exit(er *EnterReturn, err error) error {
+// Implement EnterExiter's Exit method.
+func (db Db) Exit(ent bool, err error) error {
 	return err
 }
 
 // Struct for error on enter.
 type DbErrOnEnt struct{}
 
-func (db DbErrOnEnt) Enter() (*EnterReturn, error) {
+// Implement EnterExiter's Enter method.
+func (db DbErrOnEnt) Enter() (*string, error) {
 	return nil, errors.New("error")
 }
 
-func (db DbErrOnEnt) Exit(er *EnterReturn, err error) error {
+// Implement EnterExiter's Exit method.
+func (db DbErrOnEnt) Exit(ent *string, err error) error {
 	return err
 }
 
 // Test full implementation
 func TestFull(t *testing.T) {
 	var ran bool
-	var erv interface{}
+	var erv bool
 
-	err := New(new(Db), func(er *EnterReturn) error {
+	err := New[bool](Db{}, func(ent bool) error {
 		ran = true
-		erv = er.Value
-
+		erv = ent
 		return nil
 	})
 
@@ -47,7 +50,7 @@ func TestFull(t *testing.T) {
 		t.Errorf("expected action to run but it did not")
 	}
 
-	if erv != 3 {
+	if erv != true {
 		t.Errorf("expected enter value to be %d, but got %v", 3, erv)
 	}
 }
@@ -56,12 +59,11 @@ func TestFull(t *testing.T) {
 // And Exit should recieve the error.
 func TestErrorOnEnter(t *testing.T) {
 	var ran bool
-	var erv interface{}
+	var erv *string
 
-	err := New(new(DbErrOnEnt), func(er *EnterReturn) error {
+	err := New[*string](DbErrOnEnt{}, func(ent *string) error {
 		ran = true
-		erv = er.Value
-
+		erv = ent
 		return nil
 	})
 
@@ -77,7 +79,7 @@ func TestErrorOnEnter(t *testing.T) {
 // Test when an error happens on action.
 // And Exit should recieve the error.
 func TestErrorOnAction(t *testing.T) {
-	err := New(new(Db), func(er *EnterReturn) error {
+	err := New[bool](Db{}, func(er bool) error {
 		return errors.New("error")
 	})
 
