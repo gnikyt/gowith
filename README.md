@@ -7,15 +7,29 @@ This function simply mocks Python's [with statement](http://docs.python.org/rele
 
 ## Usage
 
-```go
-import (
-  "githib.com/gnikyt/gowith"
-)
-```
-
 The with statement is used to wrap the execution of code with methods defined by an object. This allows common tasks to be encapsulated for convenient reuse.
 
-A with statement is defined as followed: `gowith.New[T]([EnterExiter], [fn])` (API: `New[T](ee EnterExiter, cf func(T) error) error`).
+    // go doc -all
+    package gowith // import "github.com/gnikyt/gowith"
+
+
+    FUNCTIONS
+
+    func New[T any](ee EnterExiter[T], cf func(T) error) error
+        Accept an implementation of EnterExiter (ee). Accept a function which fires
+        between Enter and Exit. Return an error (if any).
+
+
+    TYPES
+
+    type EnterExiter[T any] interface {
+            // On enter, return enter value (T) to pass to callable function.
+            Enter() (T, error)
+
+            // On exit, accept the enter value (T), return error (if any).
+            Exit(T, error) error
+    }
+        With interface to match Python's enter/exit.
 
 The executation of a with statement is done as followed:
 
@@ -28,6 +42,7 @@ Here is a sample object and a with-statement:
 
 ```go
 import (
+  "github.com/gnikyt/gowith"
   "context"
   "database/sql"
 )
@@ -90,8 +105,8 @@ The above example is processed as follows:
 + `With` will call `Db.Enter`
 + `Db.Enter` will setup the database, and return a transaction.
 + `With` will now pass the transaction to the anonymous function.
-+ `With` now executes fn (if `Enter` returned no error).
-+ `With` now calls `Db.Exit` and passes the transaction and the error (if any).
++ `With` now executes fn (only if `Enter` returned no error).
++ `With` now calls `Db.Exit` and passes the transaction and the error (if error exists).
 + `Db.Exit` now checks for an error and rollsback the changes if so, or commits them.
 
 You could even go a step further and build a wrapper to make it easier:
