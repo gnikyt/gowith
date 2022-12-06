@@ -9,28 +9,6 @@ This function simply mocks Python's [with statement](http://docs.python.org/rele
 
 The with statement is used to wrap the execution of code with methods defined by an object. This allows common tasks to be encapsulated for convenient reuse.
 
-    // go doc -all
-    package gowith // import "github.com/gnikyt/gowith"
-
-
-    FUNCTIONS
-
-    func New[T any](ee EnterExiter[T], cf func(T) error) error
-        Accept an implementation of EnterExiter (ee). Accept a function which fires
-        between Enter and Exit. Return an error (if any).
-
-
-    TYPES
-
-    type EnterExiter[T any] interface {
-            // On enter, return enter value (T) to pass to callable function.
-            Enter() (T, error)
-
-            // On exit, accept the enter value (T), return error (if any).
-            Exit(T, error) error
-    }
-        With interface to match Python's enter/exit.
-
 The executation of a with statement is done as followed:
 
 1. The `[EnterExiter]`'s `Enter()` method is invoked
@@ -126,3 +104,37 @@ if err != nil {
   fmt.Errorf(err.Error())
 }
 ```
+
+## Testing
+
+`go test ./...`, fully tested.
+
+## Documentation
+
+    // go doc -all
+    package gowith // import "github.com/gnikyt/gowith"
+
+
+    FUNCTIONS
+
+    func New[T any](ee EnterExiter[T], cf func(T) error) error
+        Accept an implementation of EnterExiter (ee). Accept a function which fires
+        between Enter and Exit. Return an error (if any).
+
+
+    TYPES
+
+    type EnterExiter[T any] interface {
+            // On enter, return enter value (T) to pass to callable function.
+            Enter() (T, error)
+
+            // On exit, accept the enter value (T), return error (if any).
+            Exit(T, error) error
+    }
+        With interface to match Python's enter/exit.
+
+Also available through [godoc.org](https://godoc.org/github.com/gnikyt/gowith).
+
+## LICENSE
+
+This project is released under the MIT [license](https://github.com/gnikyt/gowith/blob/master/LICENSE).
